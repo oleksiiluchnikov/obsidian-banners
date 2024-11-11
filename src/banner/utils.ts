@@ -3,6 +3,7 @@ import { IMAGE_EXTENSIONS } from 'src/bannerData';
 import { plug } from 'src/main';
 
 const FILE_REGEX = /^\[\[.+\]\]/;
+const IMAGE_REGEX = /^!\[.+\]\(.+\)$/;
 const imageCache: Record<string, string> = {};
 
 const getInternalImage = (link: string, currentPath: string) => {
@@ -47,6 +48,8 @@ export const fetchImage = async (src: string, currentPath: string): Promise<stri
 
   if (FILE_REGEX.test(src)) {
     return getInternalImage(src, currentPath);
+  } else if (IMAGE_REGEX.test(src)) {
+        return getRemoteImage(src.slice(2, -2));
   } else {
     return getRemoteImage(src);
   }
